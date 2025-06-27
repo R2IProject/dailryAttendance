@@ -5,8 +5,10 @@ import { ObjectId } from "mongodb";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   try {
     const session = await getSession();
     if (!session) {
@@ -14,7 +16,6 @@ export async function PUT(
     }
 
     const { type, tasks } = await request.json();
-    const { id } = params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid record ID" }, { status: 400 });
@@ -33,7 +34,13 @@ export async function PUT(
     }
 
     // Update based on type
-    const updateData: any = { updatedAt: new Date() };
+    const updateData: Partial<{
+      checkInTasks: string[];
+      checkOutTasks: string[];
+      checkInTime: string;
+      checkOutTime: string;
+      updatedAt: Date;
+    }> = { updatedAt: new Date() };
 
     if (type === "checkin") {
       updateData.checkInTasks = tasks;
@@ -73,15 +80,15 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const { id } = params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid record ID" }, { status: 400 });

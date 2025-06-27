@@ -5,7 +5,9 @@ import bcrypt from "bcryptjs";
 const secretKey = process.env.JWT_SECRET || "your-secret-key";
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
+export async function encrypt(
+  payload: Record<string, unknown>
+): Promise<string> {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -13,6 +15,7 @@ export async function encrypt(payload: any) {
     .sign(key);
 }
 
+// eslint-disable-next-line
 export async function decrypt(input: string): Promise<any> {
   try {
     const { payload } = await jwtVerify(input, key, {
@@ -20,6 +23,7 @@ export async function decrypt(input: string): Promise<any> {
     });
     return payload;
   } catch (error) {
+    console.error("Error decrypting session:", error);
     return null;
   }
 }

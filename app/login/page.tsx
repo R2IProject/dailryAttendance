@@ -48,6 +48,7 @@ export default function LoginPage() {
         setError(data.error || "Authentication failed");
       }
     } catch (error) {
+      console.error("Error:", error);
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);

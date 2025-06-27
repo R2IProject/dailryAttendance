@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,21 +13,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Trash2, ArrowLeft } from "lucide-react";
-import type { Task } from "@/lib/types";
+import type { Task, Users } from "@/lib/types";
 
 export default function CheckOutPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<Users>();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
   const [newTimeRange, setNewTimeRange] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch("/api/auth/me");
       if (response.ok) {
@@ -37,9 +33,14 @@ export default function CheckOutPage() {
         router.push("/login");
       }
     } catch (error) {
+      console.error("Error updating record:", error);
       router.push("/login");
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const addTask = () => {
     if (newTask.trim()) {
@@ -82,7 +83,7 @@ export default function CheckOutPage() {
         alert("Failed to check out");
       }
     } catch (error) {
-      alert("An error occurred");
+      console.error("Error updating record:", error);
     } finally {
       setLoading(false);
     }

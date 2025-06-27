@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongodb";
 import { getSession } from "@/lib/auth";
 import type { AttendanceFilters } from "@/lib/types";
+import { Filter, Document } from "mongodb";
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     const db = await getDatabase();
 
     // Build query
-    const query: any = { userId: session.userId };
+    const query: Filter<Document> = { userId: session.userId };
 
     if (filters.startDate || filters.endDate) {
       query.date = {};
@@ -114,7 +115,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Update based on type
-    const updateData: any = { updatedAt: new Date() };
+    const updateData: Partial<{
+      checkInTasks: string[];
+      checkOutTasks: string[];
+      checkInTime: string;
+      checkOutTime: string;
+      updatedAt: Date;
+    }> = { updatedAt: new Date() };
 
     if (type === "checkin") {
       updateData.checkInTime = currentTime;

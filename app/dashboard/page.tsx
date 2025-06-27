@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,10 +42,10 @@ import {
   MessageCircle,
   Plus,
 } from "lucide-react";
-import type { AttendanceRecord, Task } from "@/lib/types";
+import type { AttendanceRecord, Task, Users } from "@/lib/types";
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<Users>();
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -67,17 +67,7 @@ export default function DashboardPage() {
   const [newTaskTimeRange, setNewTaskTimeRange] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      fetchAttendanceRecords();
-    }
-  }, [user, search, startDate, endDate, pagination.page]);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch("/api/auth/me");
       if (response.ok) {
@@ -90,9 +80,13 @@ export default function DashboardPage() {
       console.error("Error updating record:", error);
       router.push("/login");
     }
-  };
+  }, [router]);
 
-  const fetchAttendanceRecords = async () => {
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  const fetchAttendanceRecords = useCallback(async () => {
     try {
       const params = new URLSearchParams({
         page: pagination.page.toString(),
@@ -114,7 +108,20 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, search, startDate, endDate]);
+
+  useEffect(() => {
+    if (user) {
+      fetchAttendanceRecords();
+    }
+  }, [
+    fetchAttendanceRecords,
+    user,
+    search,
+    startDate,
+    endDate,
+    pagination.page,
+  ]);
 
   const handleLogout = async () => {
     try {
