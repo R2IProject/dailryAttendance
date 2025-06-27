@@ -5,9 +5,9 @@ import { ObjectId } from "mongodb";
 
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
-  const { id } = await context.params;
+  const { id } = context.params;
 
   try {
     const session = await getSession();
@@ -80,9 +80,9 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
-  const { id } = await params;
+  const { id } = context.params;
 
   try {
     const session = await getSession();
