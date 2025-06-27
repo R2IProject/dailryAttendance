@@ -3,10 +3,8 @@ import { getDatabase } from "@/lib/mongodb";
 import { getSession } from "@/lib/auth";
 import { ObjectId } from "mongodb";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+type Context = { params: { id: string } };
+export async function PUT(request: NextRequest, { params }: Context) {
   try {
     const session = await getSession();
     if (!session) {
@@ -77,10 +75,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: Context) {
   try {
     const session = await getSession();
     if (!session) {
