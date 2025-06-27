@@ -1,13 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongodb";
 import { getSession } from "@/lib/auth";
 import { ObjectId } from "mongodb";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
+type RouteParams = { params: { id: string } };
+export async function PUT(request: NextRequest, context: RouteParams) {
+  const { id } = context.params;
 
   try {
     const session = await getSession();
@@ -78,11 +77,8 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
+export async function DELETE(request: NextRequest, context: RouteParams) {
+  const { id } = context.params;
 
   try {
     const session = await getSession();
