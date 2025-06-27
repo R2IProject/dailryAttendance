@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongodb";
-import { hashPassword, createSession } from "@/lib/auth";
+import { createSession } from "@/lib/auth";
+import { hashPassword } from "@/lib/password-utils";
 
 export async function POST(request: NextRequest) {
   try {
