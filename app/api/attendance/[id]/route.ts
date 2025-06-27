@@ -5,10 +5,8 @@ import { ObjectId } from "mongodb";
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
-
   try {
     const session = await getSession();
     if (!session) {
@@ -16,6 +14,7 @@ export async function PUT(
     }
 
     const { type, tasks } = await request.json();
+    const { id } = params;
 
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid record ID" }, { status: 400 });
@@ -80,16 +79,14 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
-
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const { id } = params;
     if (!ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid record ID" }, { status: 400 });
     }
