@@ -85,12 +85,14 @@ export async function POST(request: NextRequest) {
 
     const { type, tasks } = await request.json();
     const today = new Date().toISOString().split("T")[0];
-    const currentTime = new Date().toLocaleTimeString("en-US", {
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta",
     });
 
+    const currentTime = formatter.format(new Date());
     const db = await getDatabase();
 
     // Find or create today's attendance record
