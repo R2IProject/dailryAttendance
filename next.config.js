@@ -8,16 +8,16 @@ const nextConfig = {
      {
       key: "Content-Security-Policy",
       value: `
-              default-src 'self';
-              script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com 'sha256-/ZLPTJ9xk9IuvtXZK6fntnOCRnzqB1lNVHw+CYcSCwc=';
-              style-src 'self' 'unsafe-inline';
-              img-src 'self' data: https:;
-              font-src 'self';
-              connect-src 'self' https://api.yourdomain.com;
-              frame-ancestors 'none';
-              upgrade-insecure-requests;
-              report-uri /api/csp-report;
-            `
+    default-src 'self';
+    script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com 'sha256-Q/TqtzFIC9hyqo1FBRA30dtJImf0ehsqSfiLjEMF6ak=';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    font-src 'self';
+    connect-src 'self' https://api.yourdomain.com;
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+    report-uri https://wattendance.vercel.app/api/csp-report;
+  `
        .replace(/\s{2,}/g, " ")
        .trim(),
      },
