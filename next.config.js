@@ -3,7 +3,7 @@ const nextConfig = {
  async headers() {
   return [
    {
-    source: "/(.*)", // Applies headers to all routes
+    source: "/(.*)",
     headers: [
      {
       key: "Strict-Transport-Security",
@@ -12,7 +12,7 @@ const nextConfig = {
      {
       key: "Content-Security-Policy",
       value:
-       "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src *; font-src 'self'; connect-src *",
+       "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
      },
      {
       key: "X-Frame-Options",
