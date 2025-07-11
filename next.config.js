@@ -7,19 +7,10 @@ const nextConfig = {
     headers: [
      {
       key: "Content-Security-Policy",
-      value: `
-    default-src 'self';
-    script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com 'sha256-Q/TqtzFIC9hyqo1FBRA30dtJImf0ehsqSfiLjEMF6ak=';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https:;
-    font-src 'self';
-    connect-src 'self' https://api.yourdomain.com;
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-    report-uri https://wattendance.vercel.app/api/csp-report;
-  `
-       .replace(/\s{2,}/g, " ")
-       .trim(),
+      value:
+       `"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",`
+        .replace(/\s{2,}/g, " ")
+        .trim(),
      },
      {
       key: "Strict-Transport-Security",
